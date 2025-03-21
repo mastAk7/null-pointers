@@ -125,3 +125,7 @@ function updateUI(user) {
     document.getElementById('user-name').innerText = `Hello, ${user.name}!`;
     document.getElementById('user-email').innerText = user.email;
 }
+
+function logout() {
+    localStorage.removeItem('user');
+}
