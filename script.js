@@ -65,6 +65,25 @@ signup.addEventListener("click", function() {
     attachLinkListener(); // Attach listener after HTML change
 });
 
+async function saveUser(email, password) {
+    try {
+        const response = await fetch("/api/saveUser", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (response.ok) {
+            alert("Data saved successfully!");
+        } else {
+            alert("Failed to save data.");
+        }
+    } catch (error) {
+        console.error("Error during fetch:", error);
+        alert("Error occurred while saving.");
+    }
+}
+
 cont.addEventListener("click", async function() { // Add 'async' here
     document.querySelector(".login-popup").style.display = "none";
     document.querySelector(".blur-overlay").style.display = "none";
@@ -74,22 +93,7 @@ cont.addEventListener("click", async function() { // Add 'async' here
         const password = document.getElementById("floatingPassword").value;
         console.log(email, password);
 
-        try {
-            const response = await fetch("/api/saveUser", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-
-            if (response.ok) {
-                alert("Data saved successfully!");
-            } else {
-                alert("Failed to save data.");
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Error occurred while saving.");
-        }
+        saveUser(email, password);
     }
 });
  
