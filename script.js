@@ -65,39 +65,14 @@ signup.addEventListener("click", function() {
     attachLinkListener(); // Attach listener after HTML change
 });
 
-async function saveUser(email, password) {
-    try {
-        const response = await fetch("https://your-vercel-app.vercel.app/api/saveUser", {
-            method: "POST",
-            mode: "cors", // Use 'cors' for deployment, 'no-cors' for testing
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-        });
-
-        if (response.ok) {
-            alert("Data saved successfully!");
-        } else {
-            alert("Failed to save data.");
-        }
-    } catch (error) {
-        console.error("Error during fetch:", error);
-        alert("Error occurred while saving.");
-    }
-}
-
-cont.addEventListener("click", async function() { // Add 'async' here
+cont.addEventListener("click", function() {
     document.querySelector(".login-popup").style.display = "none";
     document.querySelector(".blur-overlay").style.display = "none";
 
-    if (method === "signup") {
-        const email = document.getElementById("floatingInput").value;
-        const password = document.getElementById("floatingPassword").value;
-        console.log(email, password);
-
-        saveUser(email, password);
+    if(method == "signup"){
+        
     }
 });
- 
 
 
 
