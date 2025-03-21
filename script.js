@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"; 
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
 document.addEventListener("DOMContentLoaded", function () {
 
     // Carousel functionality
