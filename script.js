@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 const login = document.getElementsByClassName("l1")[0];
 const signup = document.getElementsByClassName("s1")[0];
 const cont = document.getElementsByClassName("cont")[0];
+const method = "";
 
 function attachLinkListener() {
     const popInner = document.querySelector(".login-popup p a");
@@ -47,6 +48,7 @@ function attachLinkListener() {
 
 
 login.addEventListener("click", function() {
+    method = "login";
     document.querySelector(".login-popup").style.display = "block";
     document.querySelector(".blur-overlay").style.display = "block";
     document.querySelector(".login-popup .card-title").innerText = "Welcome Back";
@@ -55,6 +57,7 @@ login.addEventListener("click", function() {
 });
 
 signup.addEventListener("click", function() {
+    method = "signup";
     document.querySelector(".login-popup").style.display = "block";
     document.querySelector(".blur-overlay").style.display = "block";
     document.querySelector(".login-popup .card-title").innerText = "Create Account";
@@ -62,10 +65,34 @@ signup.addEventListener("click", function() {
     attachLinkListener(); // Attach listener after HTML change
 });
 
-cont.addEventListener("click", function() {
+cont.addEventListener("click", async function() { // Add 'async' here
     document.querySelector(".login-popup").style.display = "none";
     document.querySelector(".blur-overlay").style.display = "none";
+
+    if (method === "signup") {
+        const email = document.getElementById("floatingInput").value;
+        const password = document.getElementById("floatingPassword").value;
+        console.log(email, password);
+
+        try {
+            const response = await fetch("/api/saveUser", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                alert("Data saved successfully!");
+            } else {
+                alert("Failed to save data.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Error occurred while saving.");
+        }
+    }
 });
+ 
 
 
 
