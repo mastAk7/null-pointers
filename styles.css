@@ -342,3 +342,6 @@ body {
     padding: 3px;
 }
 
+.login-button-dis{
+    display: none !important;
+}
