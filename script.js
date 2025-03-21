@@ -55,6 +55,12 @@ async function saveUserToFirestore(user) {
     }
 }
 
+// Function to close popup
+function closePopup() {
+    document.querySelector(".login-popup").style.display = "none";
+    document.querySelector(".blur-overlay").style.display = "none";
+}
+
 // Handle link clicks inside popup
 function attachLinkListener() {
     const popInner = document.querySelector(".login-popup p a");
@@ -113,8 +119,7 @@ cont.addEventListener("click", function () {
                 saveUserToFirestore(user);
                 
                 // Close popup
-                document.querySelector(".login-popup").style.display = "none";
-                document.querySelector(".blur-overlay").style.display = "none";
+                closePopup();
             })
             .catch((error) => {
                 alert("Error: " + error.message);
@@ -130,8 +135,7 @@ cont.addEventListener("click", function () {
                 setDoc(doc(db, "users", user.uid), { lastLogin: new Date().toISOString() }, { merge: true });
                 
                 // Close popup
-                document.querySelector(".login-popup").style.display = "none";
-                document.querySelector(".blur-overlay").style.display = "none";
+                closePopup();
                 
                 alert("Login successful!");
             })
@@ -152,12 +156,26 @@ async function handleCredentialResponse(response) {
         const result = await signInWithCredential(auth, credential);
         const user = result.user;
         
+        console.log("Google sign-in successful for:", user.email);
+        
         // Save user data to Firestore
         await saveUserToFirestore(user);
         
-        // Close popup
-        document.querySelector(".login-popup").style.display = "none";
-        document.querySelector(".blur-overlay").style.display = "none";
+        // Close the popup after a short delay
+        setTimeout(() => {
+            closePopup();
+            // Force close any Google popup that might still be open
+            const googlePopups = document.querySelectorAll('div[aria-modal="true"]');
+            googlePopups.forEach(popup => {
+                popup.style.display = 'none';
+            });
+            
+            // Remove any backdrop or overlay from the Google sign-in
+            const backdrops = document.querySelectorAll('.backdrop');
+            backdrops.forEach(backdrop => {
+                backdrop.style.display = 'none';
+            });
+        }, 1000);
         
     } catch (error) {
         console.error("Firebase Google Sign-In Error:", error);
@@ -181,6 +199,11 @@ document.addEventListener("click", function(event) {
     }
 });
 
+// Close login popup when clicking on blur overlay
+document.querySelector(".blur-overlay").addEventListener("click", function() {
+    closePopup();
+});
+
 // Update UI with user data
 function updateUI(user) {
     if (user) {
@@ -194,6 +217,9 @@ function updateUI(user) {
         // Set name and email
         document.getElementById('user-name').innerText = `Hello, ${user.displayName || user.email.split('@')[0]}!`;
         document.getElementById('user-email').innerText = user.email;
+        
+        // Close popup if it's open after successful authentication
+        closePopup();
     } else {
         document.getElementById('null-login').classList.remove("login-button-dis");
         document.getElementById('null-login').style.display = 'flex';
