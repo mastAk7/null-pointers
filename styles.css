@@ -1,0 +1,282 @@
+/* Global Styling */
+body {
+    background-color: #cad9ef; /* Dark Navy Blue */
+    color: #E0E7FF; /* Soft White-Blue */
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Navbar Styling */
+#navBar{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.navbar {
+    background-color: #0c2f50; /* Darker Navy */
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    font-size: 40px;
+    color: #64B5F6 !important; /* Light Blue */
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    margin-right: 8px;
+}
+
+.navbar-nav {
+    margin-left: auto;
+}
+
+.nav-item {
+    margin-right: 20px;
+}
+
+.nav-link {
+    color: #E0E7FF !important;
+    font-size: 20px;
+    padding: 10px 15px;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: #64B5F6 !important;
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn-green {
+    background-color: #0077B6; /* Blue Accent */
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+.btn-green:hover {
+    background-color: #0096C7; /* Lighter Blue */
+    transform: scale(1.025);
+}
+
+.s1{
+    background-color: #0077B6; /* Blue Accent */
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+.l1{
+    background-color: #0077B6; /* Blue Accent */
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+.s1:hover,.l1:hover {
+    background-color: #0096C7; /* Lighter Blue */
+    transform: scale(1.025);
+}
+
+
+
+
+/* Hero Section */
+.whitebox {
+    color: white;
+    height: 500px;
+    width: auto;
+    background: linear-gradient(135deg, #0A192F 30%, #112D4E 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+#Home{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+#t1{
+    color: #0c2f50;
+}
+
+/* about */
+
+#about{
+    background-color: #fff;
+    position: relative;
+    z-index: 1;
+}
+
+.feature-box{
+    padding: 3%;
+    text-align: center;
+}
+
+.feature-icon{
+    color: #b4ca9b;
+    margin-bottom: 15px;
+}
+
+.carousel-item{
+    text-align: center;
+}
+
+.story-row{
+    padding-top: 15px;
+}
+
+.story-conf{
+    text-align: left;
+    padding-top: 2%;
+}
+
+.story-image{
+    width: 150px;
+    border-radius: 200px;
+}
+
+#stories{
+    margin-top: 100px;
+    margin-bottom: 100px;
+    background-color: #0c2f50;
+}
+
+/* Footer */
+.footer {
+    background-color: #0c2f50;
+    color: #E0E7FF;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Animation */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInAnimation 1s ease-in-out forwards;
+}
+
+@keyframes fadeInAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Bouncing Animation for Camera Icon */
+.camera-icon {
+    display: inline-block;
+    animation: bounce 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-10px);
+    }
+}
+
+/* login */
+
+.login{
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+.login .card{
+    width: 400px;
+    margin: auto;
+    text-align: center;
+}
+
+.login h1{
+    color: #0c2f50;
+    font-size: 2.5rem;
+}
+
+.login input:focus {
+    outline: none; /* Remove default outline */
+    border: 1px solid #0c2f50; /* Orange border */
+    box-shadow: 0 0 0 0.3rem #0c2f50 !important; /* Light orange glow */
+}
+
+.login .btn-dark{
+    width: 325px;
+    height: 60px;
+    background-color: #0c2f50;
+    border-color: #0c2f50;
+    font-size: large;
+    margin-bottom: 8px;
+}
+
+.login .btn-dark:hover{
+    background-color: #1a5b97;
+}
+
+.login .btn-dark:active{
+    background-color: #0c2f50;
+    border-color: #0c2f50;
+}
+
+.login .btn-outline-dark{
+    text-align: left;
+    width: 325px;
+    height: 60px;
+    color: #0c2f50;
+    border-color: #0c2f50;
+    font-weight: 600;
+    font-size: large;
+    margin-bottom: 8px;
+}
+
+.login .btn-outline-dark:hover{
+    background-color: #0c2f50;
+    color: #fff;
+}
+
+.login .btn-outline-dark:active{
+    background-color: #0c2f50;
+    border-color: #0c2f50;
+}
+
+.login a{
+    text-decoration: none;
+    color: #0c2f50;
+    font-weight: 500;
+}
+
+.login a:hover{
+    color: #1a5b97;
+}
+
+.login p{
+    color: grey;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.login i{
+    margin: 0 10px;
+}
+
+.or{
+    padding: 3px;
+}
+

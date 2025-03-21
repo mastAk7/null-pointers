@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fraudEye</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <!-- <div class="home"> -->
+        <nav id="navBar" class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand fade-in" href="#"><img src="logo.png" alt="Logo" class="logo">fraudEye</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav mx-auto fade-in">
+                        <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#why-us">Why Us?</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
+                    </ul>
+                    <div class="d-flex">
+                        <a href="signup.html" class="btn me-2 s1">Sign Up</a>
+                        <a href="login.html" class="btn l1">Login</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+    <!-- Main Content -->
+    <div id="Home" class="container text-center mt-5 fade-in">
+        <h1 id="t1">Identify Your Waste</h1>
+        <p class="text-muted" style="font-family: 'Times New Roman', Times, serif;"><i>Use your camera to identify the type of waste.</i></p>
+
+        <div class="card p-4 mt-4">
+            <i class="bi-shield-lock camera-icon" style="font-size: 3rem; color: #0c2f50;"></i>
+            <p class="mt-2">Click below to start</p>
+            <a class="btn btn-outline-light title-btn-2" type="button" href="Index1/index1.html"> <button id="start-camera" class="btn btn-green"> Open Camera </button></a>
+            <div id="camera-screen" class="camera-overlay" style="display: none;">
+                <video id="video" autoplay></video>
+                <button id="close-camera" class="close-camera">Close</button>
+            </div>
+        </div>
+    </div>
+    <!-- </div> -->
+
+    <section class="coloured-section" id="stories">
+        <div id="story" class="carousel slide">
+            <div class="carousel-inner">
+
+                <div class="carousel-item active container-fluid">
+                    <h2> A small business owner was struggling to truly understand customer feedback. With ClarityIQ, they finally gained real-time insights, helping them refine their services and make data-driven decisions with confidence. </h2>
+                    <div class="row story-row">
+                        <div class="col-lg-3">
+                            <img class="story-image" src="images/story1.jpg" alt="Impact Story 1">
+                        </div>
+                        <div class="col-lg-9 story-conf">
+                            <em> “Game-Changer for Our Business!” says Sarah Mitchell, Founder at Bloom & Co.</em>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-item container-fluid">
+                    <h2> An online brand manager found it overwhelming to keep up with endless reviews and social media comments. After using ClarityIQ, they could instantly analyze sentiment and respond proactively, making a real difference in customer engagement. </h2>
+                    <div class="row story-row">
+                        <div class="col-lg-3">
+                            <img class="story-image" src="images/story2.jpg" alt="Impact Story 2">
+                        </div>
+                        <div class="col-lg-9 story-conf">
+                            <em> "Real-Time Insights, Real Impact" says James Carter, Social Media Manager at TrendHive.</em>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-item container-fluid">
+                    <h2> Priya Anand, Head of Analytics at VisionTech, used to spend hours manually sorting through customer feedback. ClarityIQ transformed their workflow, automating sentiment analysis and turning raw data into actionable insights, allowing her team to focus on real improvements. </h2>
+                    <div class="row story-row">
+                        <div class="col-lg-3">
+                            <img class="story-image" src="images/story3.jpg" alt="Impact Story 3">
+                        </div>
+                        <div class="col-lg-9 story-conf">
+                            <em> "Simplifies Complex Data" says Priya Anand.</em>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-item container-fluid">
+                    <h2> A marketing manager needed a way to understand shifting customer sentiments quickly. With ClarityIQ’s AI-powered analysis, they now get fast and accurate insights, helping them stay ahead of trends and improve customer satisfaction.  </h2>
+                    <div class="row story-row">
+                        <div class="col-lg-3">
+                            <img class="story-image" src="images/story4.jpg" alt="Impact Story 4">
+                        </div>
+                        <div class="col-lg-9 story-conf">
+                            <em> "Fast, Accurate, and Reliable" says David Owens, Marketing Director at FreshBites</em>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-item container-fluid">
+                    <h2> A growing company believed they understood their customers—until ClarityIQ revealed hidden trends they had completely missed. By leveraging the platform’s deep insights, they transformed their engagement strategy and built stronger customer relationships. </h2>
+                    <div class="row story-row">
+                        <div class="col-lg-3">
+                            <img class="story-image" src="images/story5.jpg" alt="Impact Story 5">
+                        </div>
+                        <div class="col-lg-9 story-conf">
+                            <em> "A Must-Have for Any Business" says Melissa Chen, Customer Experience Lead at NexaCommerce </em>
+                        </div>
+                    </div>
+                </div>
+                
+
+            </div>
+            <button class="carousel-control-prev" type="button"data-bs-target="#story" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button"data-bs-target="#story" data-bs-slide="next">
+                <span class="carousel-control-next-icon"aria-hidden="true"></span>
+            </button>
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#story" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"> </button>
+                <button type="button" data-bs-target="#story" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#story" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#story" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                <button type="button" data-bs-target="#story" data-bs-slide-to="4" aria-label="Slide 5"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 Waste Identification App</p>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script>
+        let currentIndex = 0;
+        const slides = document.querySelectorAll(".slide");
+        
+        function changeSlide(direction) {
+            slides[currentIndex].classList.remove("active");
+            currentIndex = (currentIndex + direction + slides.length) % slides.length;
+            slides[currentIndex].classList.add("active");
+        }
+    </script> -->
+    <script src="script.js"></script>
+</body>
+</html>
