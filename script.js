@@ -29,8 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const login = document.getElementsByClassName("l1")[0];
 const signup = document.getElementsByClassName("s1")[0];
-var cont = document.getElementsByClassName("cont")[0];
-const method = "";
+const cont = document.getElementsByClassName("cont")[0];
+var method = "";
 
 function attachLinkListener() {
     const popInner = document.querySelector(".login-popup p a");
