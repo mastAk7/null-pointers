@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const login = document.getElementsByClassName("l1")[0];
 const signup = document.getElementsByClassName("s1")[0];
-const cont = document.getElementsByClassName("cont")[0];
+var cont = document.getElementsByClassName("cont")[0];
 const method = "";
 
 function attachLinkListener() {
