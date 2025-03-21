@@ -181,3 +181,48 @@ function logout() {
     localStorage.removeItem('user');
     location.reload(); 
 }
+
+
+import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+
+// Add this after initializing Firebase auth
+const googleProvider = new GoogleAuthProvider();
+
+// Add this event listener after your other event listeners
+document.getElementById('googleSignIn').addEventListener('click', function() {
+    signInWithPopup(auth, googleProvider)
+        .then((result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            
+            // The signed-in user info.
+            const user = result.user;
+            
+            // Store user info and update UI
+            const userData = {
+                name: user.displayName,
+                email: user.email,
+                picture: user.photoURL
+            };
+            
+            localStorage.setItem('user', JSON.stringify(userData));
+            updateUI(userData);
+            
+            // Hide login popup
+            document.querySelector(".login-popup").style.display = "none";
+            document.querySelector(".blur-overlay").style.display = "none";
+            
+        }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData ? error.customData.email : '';
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            
+            console.error("Google Sign-In Error:", errorMessage);
+            alert("Google Sign-In Failed: " + errorMessage);
+        });
+});
