@@ -1,43 +1,14 @@
+// Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
-document.addEventListener("DOMContentLoaded", function () {
+import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    GoogleAuthProvider, 
+    signInWithCredential 
+} from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
 
-    // Carousel functionality
-    let currentIndex = 0; 
-    const slides = document.querySelectorAll(".slide");
-
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            slide.style.display = i === index ? "block" : "none";
-        });
-    }
-
-    function changeSlide(direction) {
-        currentIndex = (currentIndex + direction + slides.length) % slides.length;
-        showSlide(currentIndex);
-    }
-
-    document.querySelector(".prev").addEventListener("click", function () {
-        changeSlide(-1);
-    });
-
-    document.querySelector(".next").addEventListener("click", function () {
-        changeSlide(1);
-    });
-
-    showSlide(currentIndex); // Show first slide on page load
-});
-
-
-const login = document.getElementsByClassName("l1")[0];
-const signup = document.getElementsByClassName("s1")[0];
-const cont = document.getElementsByClassName("cont")[0];
-var method = "";
-// Import the functions you need from the SDKs you need
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
+// Firebase configuration - using your existing config
 const firebaseConfig = {
     apiKey: "AIzaSyBkl3iA_4CIBC9LOGaivdtkvk1NnfKfDJI",
     authDomain: "fraud-eye.firebaseapp.com",
@@ -49,56 +20,72 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
-// Authentication Service
-const auth = getAuth();
+// Variables
+let method = "";
+const login = document.getElementsByClassName("l1")[0];
+const signup = document.getElementsByClassName("s1")[0];
+const cont = document.getElementsByClassName("cont")[0];
 
-
+// Handle link clicks inside popup
 function attachLinkListener() {
     const popInner = document.querySelector(".login-popup p a");
     popInner.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevents default link behavior if needed
-        var targetClass = event.target.classList[0]; // Get class name
+        event.preventDefault();
+        var targetClass = event.target.classList[0];
 
         if (targetClass === "signup") {
-            signup.click(); // Trigger signup button click
+            signup.click();
         } else if (targetClass === "login") {
-            login.click(); // Trigger login button click
+            login.click();
         }
     });
 }
 
-
+// Login button click
 login.addEventListener("click", function() {
     method = "login";
     document.querySelector(".login-popup").style.display = "block";
     document.querySelector(".blur-overlay").style.display = "block";
     document.querySelector(".login-popup .card-title").innerText = "Welcome Back";
     document.querySelector(".login-popup p").innerHTML = `Don't have an account? <a class="signup">Sign Up</a>`;
-    attachLinkListener(); // Attach listener after HTML change
+    attachLinkListener();
 });
 
+// Signup button click
 signup.addEventListener("click", function() {
     method = "signup";
     document.querySelector(".login-popup").style.display = "block";
     document.querySelector(".blur-overlay").style.display = "block";
     document.querySelector(".login-popup .card-title").innerText = "Create Account";
     document.querySelector(".login-popup p").innerHTML = `Already have an account? <a class="login">Log In</a>`;
-    attachLinkListener(); // Attach listener after HTML change
+    attachLinkListener();
 });
 
+// Continue button click (for email/password auth)
 cont.addEventListener("click", function () {
-    document.querySelector(".login-popup").style.display = "none";
-    document.querySelector(".blur-overlay").style.display = "none";
-
     const email = document.getElementById("floatingInput").value;
     const password = document.getElementById("floatingPassword").value;
 
     if (method === "signup") {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                const user = userCredential.user;
                 alert("Account created successfully!");
-                console.log("User:", userCredential.user);
+                
+                // Store minimal user info
+                const userData = {
+                    name: email.split('@')[0], // Use part before @ as name
+                    email: email,
+                    picture: "https://ui-avatars.com/api/?name=" + email.split('@')[0] // Default avatar
+                };
+                
+                localStorage.setItem('user', JSON.stringify(userData));
+                document.querySelector(".login-popup").style.display = "none";
+                document.querySelector(".blur-overlay").style.display = "none";
+                updateUI(userData);
             })
             .catch((error) => {
                 alert("Error: " + error.message);
@@ -107,8 +94,20 @@ cont.addEventListener("click", function () {
     } else if (method === "login") {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                const user = userCredential.user;
+                
+                // Store minimal user info
+                const userData = {
+                    name: email.split('@')[0], // Use part before @ as name
+                    email: email,
+                    picture: "https://ui-avatars.com/api/?name=" + email.split('@')[0] // Default avatar
+                };
+                
+                localStorage.setItem('user', JSON.stringify(userData));
+                document.querySelector(".login-popup").style.display = "none";
+                document.querySelector(".blur-overlay").style.display = "none";
+                updateUI(userData);
                 alert("Login successful!");
-                console.log("User:", userCredential.user);
             })
             .catch((error) => {
                 alert("Login Failed: " + error.message);
@@ -117,35 +116,27 @@ cont.addEventListener("click", function () {
     }
 });
 
-
-
-function togglePopup() {
-    let popup = document.getElementById("user-popup");
-    popup.style.display = (popup.style.display === "block") ? "none" : "block";
-} 
-
-// Close popup when clicking outside
-document.addEventListener("click", function(event) {
-    let popup = document.getElementById("user-popup");
-    let profilePic = document.getElementById("user-pic");
-
-    if (popup.style.display === "block" && event.target !== popup && event.target !== profilePic) {
-        popup.style.display = "none";
-    }
-});
-
-
+// Google Sign-In callback
 function handleCredentialResponse(response) {
-    // Decode JWT token to get user details
-    const user = parseJwt(response.credential);
-
-    // Store user info in localStorage to persist login
-    localStorage.setItem('user', JSON.stringify(user));
-
-    // Redirect to home page after login
-    document.querySelector(".login-popup").style.display = "none";
-    document.querySelector(".blur-overlay").style.display = "none";  // Redirect AFTER storing user data
-    location.reload(); 
+    // Decode JWT to get user info
+    const userData = parseJwt(response.credential);
+    
+    // Create a credential with the Google ID token
+    const credential = GoogleAuthProvider.credential(response.credential);
+    
+    // Sign in to Firebase with the Google credential
+    signInWithCredential(auth, credential)
+        .then((result) => {
+            // Store user data and update UI
+            localStorage.setItem('user', JSON.stringify(userData));
+            document.querySelector(".login-popup").style.display = "none";
+            document.querySelector(".blur-overlay").style.display = "none";
+            updateUI(userData);
+        })
+        .catch((error) => {
+            console.error("Firebase Google Sign-In Error:", error);
+            alert("Sign-In Failed: " + error.message);
+        });
 }
 
 // Function to decode JWT token
@@ -159,17 +150,26 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload);
 }
 
-// Keep user logged in after page refresh
-window.onload = function () {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-        updateUI(JSON.parse(savedUser));
-    }
-};
+// Toggle user popup
+function togglePopup() {
+    let popup = document.getElementById("user-popup");
+    popup.style.display = (popup.style.display === "block") ? "none" : "block";
+}
 
-function updateUI(user) { 
+// Close popup when clicking outside
+document.addEventListener("click", function(event) {
+    let popup = document.getElementById("user-popup");
+    let profilePic = document.getElementById("user-pic");
+
+    if (popup.style.display === "block" && event.target !== popup && event.target !== profilePic) {
+        popup.style.display = "none";
+    }
+});
+
+// Update UI with user data
+function updateUI(user) {
     document.getElementById('null-login').classList.add("login-button-dis");
-    document.getElementById('null-login').style.display = 'none';   
+    document.getElementById('null-login').style.display = 'none';
     document.getElementById('user-section').style.display = 'block';
 
     document.getElementById('user-pic').src = user.picture;
@@ -177,52 +177,21 @@ function updateUI(user) {
     document.getElementById('user-email').innerText = user.email;
 }
 
+// Logout function
 function logout() {
     localStorage.removeItem('user');
-    location.reload(); 
+    location.reload();
 }
 
+// Check if user is already logged in
+window.onload = function () {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+        updateUI(JSON.parse(savedUser));
+    }
+};
 
-import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
-
-// Add this after initializing Firebase auth
-const googleProvider = new GoogleAuthProvider();
-
-// Add this event listener after your other event listeners
-document.getElementById('googleSignIn').addEventListener('click', function() {
-    signInWithPopup(auth, googleProvider)
-        .then((result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
-            
-            // The signed-in user info.
-            const user = result.user;
-            
-            // Store user info and update UI
-            const userData = {
-                name: user.displayName,
-                email: user.email,
-                picture: user.photoURL
-            };
-            
-            localStorage.setItem('user', JSON.stringify(userData));
-            updateUI(userData);
-            
-            // Hide login popup
-            document.querySelector(".login-popup").style.display = "none";
-            document.querySelector(".blur-overlay").style.display = "none";
-            
-        }).catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData ? error.customData.email : '';
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-            
-            console.error("Google Sign-In Error:", errorMessage);
-            alert("Google Sign-In Failed: " + errorMessage);
-        });
-});
+// Make functions available globally for HTML onclick and Google callback
+window.togglePopup = togglePopup;
+window.logout = logout;
+window.handleCredentialResponse = handleCredentialResponse;
