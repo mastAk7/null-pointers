@@ -29,7 +29,7 @@
                     <br>
                     <button class="btn btn-dark cont" type="button"> Continue</button>
                     <br>
-                    <p> Don't have an account? <a href="signUp.html"> Sign Up </a> </p>
+                    <p> Don't have an account? <a class="signup" href="#"> Sign Up </a> </p>
                     <div class="row">   
                         <div class="col-5"> <hr> </div>
                         <div class="col-2 or"> OR </div>
@@ -103,62 +103,62 @@
             <div class="carousel-inner">
 
                 <div class="carousel-item active container-fluid">
-                    <h2> James Carter’s e-commerce store was drowning in chargebacks. Manual reviews were too slow, and fraud kept slipping through. With FraudEye, transactions were analyzed in real time, stopping fraud before it could cause damage. </h2>
+                    <h2> James Carter's e-commerce store was drowning in chargebacks. Manual reviews were too slow, and fraud kept slipping through. With FraudEye, transactions were analyzed in real time, stopping fraud before it could cause damage. </h2>
                     <div class="row story-row">
                         <div class="col-lg-3">
                             <img class="story-image" src="assests/impact1.png" alt="Impact Story 1">
                         </div>
                         <div class="col-lg-9 story-conf">
-                            <em>  “This tool blocked a scam within the first week! It’s like having a 24/7 security guard for our payments.” says James Carter’s, CEO at TrendyCart</em>
+                            <em>  "This tool blocked a scam within the first week! It's like having a 24/7 security guard for our payments." says James Carter's, CEO at TrendyCart</em>
                         </div>
                     </div>
                 </div>
                 
                 <div class="carousel-item container-fluid">
-                    <h2> Neha Sharma’s payment platform struggled with delayed fraud detection. By the time they flagged issues, the money was gone. FraudEye’s AI-driven alerts caught suspicious activity instantly, helping her team act before it was too late. </h2>
+                    <h2> Neha Sharma's payment platform struggled with delayed fraud detection. By the time they flagged issues, the money was gone. FraudEye's AI-driven alerts caught suspicious activity instantly, helping her team act before it was too late. </h2>
                     <div class="row story-row">
                         <div class="col-lg-3">
                             <img class="story-image" src="assests/impact2.png" alt="Impact Story 2">
                         </div>
                         <div class="col-lg-9 story-conf">
-                            <em> “We finally feel in control. FraudEye’s speed and accuracy are game-changers!” says Neha Sharma, CTO at PaySecure.</em>
+                            <em> "We finally feel in control. FraudEye's speed and accuracy are game-changers!" says Neha Sharma, CTO at PaySecure.</em>
                         </div>
                     </div>
                 </div>
                 
                 <div class="carousel-item container-fluid">
-                    <h2> Daniel Wong wanted a fraud detection system that was both powerful and easy to use. Complex dashboards from other tools were overwhelming, but FraudEye’s simple interface and detailed insights made fraud monitoring effortless.</h2>
+                    <h2> Daniel Wong wanted a fraud detection system that was both powerful and easy to use. Complex dashboards from other tools were overwhelming, but FraudEye's simple interface and detailed insights made fraud monitoring effortless.</h2>
                     <div class="row story-row">
                         <div class="col-lg-3">
                             <img class="story-image" src="assests/impact3.png" alt="Impact Story 3">
                         </div>
                         <div class="col-lg-9 story-conf">
-                            <em> “Accurate, fast, and user-friendly—exactly what we needed!” says Daniel Wong, CFO at SwiftPayments</em>
+                            <em> "Accurate, fast, and user-friendly—exactly what we needed!" says Daniel Wong, CFO at SwiftPayments</em>
                         </div>
                     </div>
                 </div>
                 
                 <div class="carousel-item container-fluid">
-                    <h2> Priya Malhotra had tested multiple fraud prevention tools, but slow processing and false positives kept causing problems. FraudEye’s AI-powered fraud scores gave her team clear, actionable insights.  </h2>
+                    <h2> Priya Malhotra had tested multiple fraud prevention tools, but slow processing and false positives kept causing problems. FraudEye's AI-powered fraud scores gave her team clear, actionable insights.  </h2>
                     <div class="row story-row">
                         <div class="col-lg-3">
                             <img class="story-image" src="assests/impact4.png" alt="Impact Story 4">
                         </div>
                         <div class="col-lg-9 story-conf">
-                            <em> “No more guessing! FraudEye tells us exactly when and why a transaction is risky.” says Priya Malhotra, Founder at DigiTrade</em>
+                            <em> "No more guessing! FraudEye tells us exactly when and why a transaction is risky." says Priya Malhotra, Founder at DigiTrade</em>
                         </div>
                     </div>
                 </div>
                 
                 <div class="carousel-item container-fluid">
-                    <h2> Markel Evans’ subscription platform faced frequent fraudulent signups. Her team needed an instant fraud detection solution—and FraudEye delivered. Now, they catch fraudsters before they exploit the system.
+                    <h2> Markel Evans' subscription platform faced frequent fraudulent signups. Her team needed an instant fraud detection solution—and FraudEye delivered. Now, they catch fraudsters before they exploit the system.
                     </h2>
                     <div class="row story-row">
                         <div class="col-lg-3">
                             <img class="story-image" src="assests/impact5.png" alt="Impact Story 5">
                         </div>
                         <div class="col-lg-9 story-conf">
-                            <em> “We went from reacting to fraud to preventing it. Huge difference!” says Markel Evans, COO at StreamNow </em>
+                            <em> "We went from reacting to fraud to preventing it. Huge difference!" says Markel Evans, COO at StreamNow </em>
                         </div>
                     </div>
                 </div>
@@ -213,19 +213,17 @@
         <p>&copy; 2025 Fraud Detection App</p>
     </div>
 
-
-
     <!-- Bootstrap JS -->
-     <!-- Include Firebase SDKs before your script.js -->
-    <!-- Replace these -->
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Load Firebase modules -->
     <script type="module" src="script.js"></script>
+
+    <!-- Make functions globally available -->
     <script>
-        // Make functions globally available
-        window.togglePopup = togglePopup;
-        window.logout = logout;
-        window.handleCredentialResponse = handleCredentialResponse;
+        window.togglePopup = function() {};
+        window.logout = function() {};
+        window.handleCredentialResponse = function() {};
     </script>
 </body>
 </html>

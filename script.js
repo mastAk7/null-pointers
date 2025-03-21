@@ -5,10 +5,18 @@ import {
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword, 
     GoogleAuthProvider, 
-    signInWithCredential 
+    signInWithCredential,
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+import { 
+    getFirestore, 
+    doc, 
+    setDoc, 
+    getDoc 
+} from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
 
-// Firebase configuration - using your existing config
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBkl3iA_4CIBC9LOGaivdtkvk1NnfKfDJI",
     authDomain: "fraud-eye.firebaseapp.com",
@@ -18,9 +26,10 @@ const firebaseConfig = {
     appId: "1:535813163862:web:94a74fd9f61d5dde2da4f7"
 };
 
-// Initialize Firebase
+// Initialize Firebase services
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
 // Variables
@@ -29,19 +38,38 @@ const login = document.getElementsByClassName("l1")[0];
 const signup = document.getElementsByClassName("s1")[0];
 const cont = document.getElementsByClassName("cont")[0];
 
+// Function to save user data to Firestore
+async function saveUserToFirestore(user) {
+    try {
+        // Create user document in Firestore
+        await setDoc(doc(db, "users", user.uid), {
+            name: user.displayName || user.email.split('@')[0],
+            email: user.email,
+            photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${user.email.split('@')[0]}`,
+            createdAt: new Date().toISOString(),
+            lastLogin: new Date().toISOString()
+        });
+        console.log("User data saved to Firestore");
+    } catch (error) {
+        console.error("Error saving user to Firestore:", error);
+    }
+}
+
 // Handle link clicks inside popup
 function attachLinkListener() {
     const popInner = document.querySelector(".login-popup p a");
-    popInner.addEventListener("click", function (event) {
-        event.preventDefault();
-        var targetClass = event.target.classList[0];
+    if (popInner) {
+        popInner.addEventListener("click", function (event) {
+            event.preventDefault();
+            var targetClass = event.target.classList[0];
 
-        if (targetClass === "signup") {
-            signup.click();
-        } else if (targetClass === "login") {
-            login.click();
-        }
-    });
+            if (targetClass === "signup") {
+                signup.click();
+            } else if (targetClass === "login") {
+                login.click();
+            }
+        });
+    }
 }
 
 // Login button click
@@ -50,7 +78,7 @@ login.addEventListener("click", function() {
     document.querySelector(".login-popup").style.display = "block";
     document.querySelector(".blur-overlay").style.display = "block";
     document.querySelector(".login-popup .card-title").innerText = "Welcome Back";
-    document.querySelector(".login-popup p").innerHTML = `Don't have an account? <a class="signup">Sign Up</a>`;
+    document.querySelector(".login-popup p").innerHTML = `Don't have an account? <a class="signup" href="#">Sign Up</a>`;
     attachLinkListener();
 });
 
@@ -60,7 +88,7 @@ signup.addEventListener("click", function() {
     document.querySelector(".login-popup").style.display = "block";
     document.querySelector(".blur-overlay").style.display = "block";
     document.querySelector(".login-popup .card-title").innerText = "Create Account";
-    document.querySelector(".login-popup p").innerHTML = `Already have an account? <a class="login">Log In</a>`;
+    document.querySelector(".login-popup p").innerHTML = `Already have an account? <a class="login" href="#">Log In</a>`;
     attachLinkListener();
 });
 
@@ -69,23 +97,24 @@ cont.addEventListener("click", function () {
     const email = document.getElementById("floatingInput").value;
     const password = document.getElementById("floatingPassword").value;
 
+    if (!email || !password) {
+        alert("Please enter both email and password");
+        return;
+    }
+
     if (method === "signup") {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                // User created successfully
                 const user = userCredential.user;
                 alert("Account created successfully!");
                 
-                // Store minimal user info
-                const userData = {
-                    name: email.split('@')[0], // Use part before @ as name
-                    email: email,
-                    picture: "https://ui-avatars.com/api/?name=" + email.split('@')[0] // Default avatar
-                };
+                // Save user data to Firestore
+                saveUserToFirestore(user);
                 
-                localStorage.setItem('user', JSON.stringify(userData));
+                // Close popup
                 document.querySelector(".login-popup").style.display = "none";
                 document.querySelector(".blur-overlay").style.display = "none";
-                updateUI(userData);
             })
             .catch((error) => {
                 alert("Error: " + error.message);
@@ -94,19 +123,16 @@ cont.addEventListener("click", function () {
     } else if (method === "login") {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                // User logged in successfully
                 const user = userCredential.user;
                 
-                // Store minimal user info
-                const userData = {
-                    name: email.split('@')[0], // Use part before @ as name
-                    email: email,
-                    picture: "https://ui-avatars.com/api/?name=" + email.split('@')[0] // Default avatar
-                };
+                // Update last login timestamp
+                setDoc(doc(db, "users", user.uid), { lastLogin: new Date().toISOString() }, { merge: true });
                 
-                localStorage.setItem('user', JSON.stringify(userData));
+                // Close popup
                 document.querySelector(".login-popup").style.display = "none";
                 document.querySelector(".blur-overlay").style.display = "none";
-                updateUI(userData);
+                
                 alert("Login successful!");
             })
             .catch((error) => {
@@ -117,44 +143,26 @@ cont.addEventListener("click", function () {
 });
 
 // Google Sign-In callback
-function handleCredentialResponse(response) {
-    // Get credential from Google Sign-In response
-    const credential = GoogleAuthProvider.credential(response.credential);
-    
-    // Sign in to Firebase with the Google credential
-    signInWithCredential(auth, credential)
-        .then((result) => {
-            // Get user info from Firebase user
-            const user = result.user;
-            
-            // Create userData object from Firebase user
-            const userData = {
-                name: user.displayName || user.email.split('@')[0],
-                email: user.email,
-                picture: user.photoURL || "https://ui-avatars.com/api/?name=" + user.email.split('@')[0]
-            };
-            
-            // Store user data and update UI
-            localStorage.setItem('user', JSON.stringify(userData));
-            document.querySelector(".login-popup").style.display = "none";
-            document.querySelector(".blur-overlay").style.display = "none";
-            updateUI(userData);
-        })
-        .catch((error) => {
-            console.error("Firebase Google Sign-In Error:", error);
-            alert("Sign-In Failed: " + error.message);
-        });
-}
-
-// Function to decode JWT token
-function parseJwt(token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
+async function handleCredentialResponse(response) {
+    try {
+        // Create a credential with the Google ID token
+        const credential = GoogleAuthProvider.credential(response.credential);
+        
+        // Sign in to Firebase with the Google credential
+        const result = await signInWithCredential(auth, credential);
+        const user = result.user;
+        
+        // Save user data to Firestore
+        await saveUserToFirestore(user);
+        
+        // Close popup
+        document.querySelector(".login-popup").style.display = "none";
+        document.querySelector(".blur-overlay").style.display = "none";
+        
+    } catch (error) {
+        console.error("Firebase Google Sign-In Error:", error);
+        alert("Sign-In Failed: " + error.message);
+    }
 }
 
 // Toggle user popup
@@ -175,25 +183,47 @@ document.addEventListener("click", function(event) {
 
 // Update UI with user data
 function updateUI(user) {
-    document.getElementById('null-login').classList.add("login-button-dis");
-    document.getElementById('null-login').style.display = 'none';
-    document.getElementById('user-section').style.display = 'block';
+    if (user) {
+        document.getElementById('null-login').classList.add("login-button-dis");
+        document.getElementById('null-login').style.display = 'none';
+        document.getElementById('user-section').style.display = 'block';
 
-    document.getElementById('user-pic').src = user.picture;
-    document.getElementById('user-name').innerText = `Hello, ${user.name}!`;
-    document.getElementById('user-email').innerText = user.email;
+        // Set profile picture
+        document.getElementById('user-pic').src = user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.email.split('@')[0]}`;
+        
+        // Set name and email
+        document.getElementById('user-name').innerText = `Hello, ${user.displayName || user.email.split('@')[0]}!`;
+        document.getElementById('user-email').innerText = user.email;
+    } else {
+        document.getElementById('null-login').classList.remove("login-button-dis");
+        document.getElementById('null-login').style.display = 'flex';
+        document.getElementById('user-section').style.display = 'none';
+    }
 }
 
 // Logout function
 function logout() {
-    localStorage.removeItem('user');
-    location.reload();
+    signOut(auth).then(() => {
+        // Sign-out successful
+        alert("Logged out successfully");
+    }).catch((error) => {
+        // An error happened
+        console.error("Logout error:", error);
+    });
 }
 
-// Check if user is already logged in
-window.onload = function () {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-        updateUI(JSON.parse(savedUser));
+// Auth state change listener
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // User is signed in
+        updateUI(user);
+    } else {
+        // User is signed out
+        updateUI(null);
     }
-};
+});
+
+// Expose functions to window object for global access
+window.togglePopup = togglePopup;
+window.logout = logout;
+window.handleCredentialResponse = handleCredentialResponse;
