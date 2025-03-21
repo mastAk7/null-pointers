@@ -190,8 +190,3 @@ window.onload = function () {
         updateUI(JSON.parse(savedUser));
     }
 };
-
-// Make functions available globally for HTML onclick and Google callback
-window.togglePopup = togglePopup;
-window.logout = logout;
-window.handleCredentialResponse = handleCredentialResponse;
