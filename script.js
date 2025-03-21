@@ -67,7 +67,7 @@ signup.addEventListener("click", function() {
 
 async function saveUser(email, password) {
     try {
-        const response = await fetch("/api/saveUser", {
+        const response = await fetch("https://your-vercel-app.vercel.app/api/saveUser", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password })
