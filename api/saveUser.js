@@ -1,26 +1,27 @@
-import { Pool } from 'pg';
+import { Pool } from "pg";
 
-// PostgreSQL connection setup using Neon connection URL
 const pool = new Pool({
-    connectionString: process.env.NEON_DB_URL, // Store in Vercel environment variables
-    ssl: { rejectUnauthorized: false }
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 export default async function handler(req, res) {
-    if (req.method === 'POST') {
+    if (req.method === "POST") {
         const { email, password } = req.body;
 
         try {
-            await pool.query(
-                'INSERT INTO users (email, password) VALUES ($1, $2)',
-                [email, password]
-            );
-            res.status(200).json({ message: 'User saved successfully!' });
+            const query = "INSERT INTO users (email, password) VALUES ($1, $2)";
+            await pool.query(query, [email, password]);
+
+            console.log("Data saved:", email, password); // Debugging
+            res.status(200).json({ message: "User saved!" });
         } catch (error) {
-            console.error('Error saving user:', error);
-            res.status(500).json({ message: 'Error saving user.' });
+            console.error("Database error:", error);
+            res.status(500).json({ message: "Failed to save user." });
         }
     } else {
-        res.status(405).json({ message: 'Method not allowed' });
+        res.status(405).json({ message: "Method not allowed" });
     }
 }
