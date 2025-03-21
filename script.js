@@ -118,15 +118,22 @@ cont.addEventListener("click", function () {
 
 // Google Sign-In callback
 function handleCredentialResponse(response) {
-    // Decode JWT to get user info
-    const userData = parseJwt(response.credential);
-    
-    // Create a credential with the Google ID token
+    // Get credential from Google Sign-In response
     const credential = GoogleAuthProvider.credential(response.credential);
     
     // Sign in to Firebase with the Google credential
     signInWithCredential(auth, credential)
         .then((result) => {
+            // Get user info from Firebase user
+            const user = result.user;
+            
+            // Create userData object from Firebase user
+            const userData = {
+                name: user.displayName || user.email.split('@')[0],
+                email: user.email,
+                picture: user.photoURL || "https://ui-avatars.com/api/?name=" + user.email.split('@')[0]
+            };
+            
             // Store user data and update UI
             localStorage.setItem('user', JSON.stringify(userData));
             document.querySelector(".login-popup").style.display = "none";
