@@ -367,6 +367,8 @@ body {
     height: 150px;
     display: none;
     position: absolute;
+    top: 60px;
+    right: 60px;
     background: white;
     padding: 15px;
     border-radius: 10px;
