@@ -1,17 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fraudEye</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- Navbar -->
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>fraudEye</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="blur-overlay" id="blur-overlay"></div>
+        <div class="container-fluid login-popup">
+            <div class="card">
+                <div class="card-body">
+                  <h1 class="card-title">Welcome Back</h5>
+                    <br>
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <label for="floatingInput">Email address</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                        <label for="floatingPassword">Password</label>
+                    </div>
+                    <br>
+                    <button class="btn btn-dark cont" type="button"> Continue</button>
+                    <br>
+                    <p> Don't have an account? <a href="signUp.html"> Sign Up </a> </p>
+                    <div class="row">   
+                        <div class="col-5"> <hr> </div>
+                        <div class="col-2 or"> OR </div>
+                        <div class="col-5"> <hr></div>
+                    </div>
+                    <br>
+                    <div id="g_id_onload"
+                         data-client_id="1015796529096-1dbhqv6pa7grrfjaf66m1qc5oa68hksk.apps.googleusercontent.com"
+                         data-callback="handleCredentialResponse"
+                         data-auto_prompt="false">
+                    </div>
+        
+                    <div id="g_id_onload"
+                         data-client_id="YOUR_CLIENT_ID"
+                         data-callback="handleCredentialResponse"
+                         data-auto_prompt="false">
+                    </div>
+        
+                    <div class="g_id_signin" data-type="standard"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Navbar -->
     <!-- <div class="home"> -->
         <nav id="navBar" class="navbar navbar-expand-lg">
             <div class="container">
@@ -27,8 +67,8 @@
                         <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
                     </ul>
                     <div class="d-flex">
-                        <a href="signup.html" class="btn me-2 s1">Sign Up</a>
-                        <a href="login.html" class="btn l1">Login</a>
+                        <a class="btn me-2 s1">Sign Up</a>
+                        <a class="btn l1">Login</a>
                     </div>
                 </div>
             </div>
@@ -43,7 +83,7 @@
             <i class="bi-shield-lock camera-icon" style="font-size: 3rem; color: #0c2f50;"></i>
             <p class="mt-2">Click below to start</p>
             <!-- <button id="start-camera" class="btn btn-green"> <a href="index1/index1.html"> Open Camera </a> -->
-            <a class="btn btn-outline-light title-btn-2" type="button" href="Index1/index1.html">Find the Fraud!</a>
+            <a class="btn btn-outline-light title-btn-2" type="button" href="I  ndex1/index1.html">Find the Fraud!</a>
             <div id="camera-screen" class="camera-overlay" style="display: none;">
                 <video id="video" autoplay></video>
                 <button id="close-camera" class="close-camera">Close</button>
@@ -166,6 +206,8 @@
     <div class="footer" id="footer">
         <p>&copy; 2025 Fraud Detection App</p>
     </div>
+
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
