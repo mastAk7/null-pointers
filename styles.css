@@ -345,3 +345,63 @@ body {
 .login-button-dis{
     display: none !important;
 }
+
+
+
+/* Circular Profile Image */
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ddd; /* Light border */
+    transition: transform 0.2s ease-in-out;
+}
+
+.profile-pic:hover {
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+/* Popup Box (Hidden by Default) */
+.popup {
+    height: 150px;
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 250px;
+    text-align: center;
+    z-index: 1000;
+}
+
+/* Popup Content */
+.popup p {
+    color: #255F38 !important;
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Logout Button */
+.popup button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.popup button:hover {
+    background: darkred;
+}
+
+
+
+.g_id_signin{
+    margin: auto !important;
+}
