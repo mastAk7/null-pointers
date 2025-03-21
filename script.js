@@ -1,5 +1,3 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 document.addEventListener("DOMContentLoaded", function () {
 
     // Carousel functionality
@@ -33,26 +31,6 @@ const login = document.getElementsByClassName("l1")[0];
 const signup = document.getElementsByClassName("s1")[0];
 const cont = document.getElementsByClassName("cont")[0];
 var method = "";
-// Import the functions you need from the SDKs you need
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBkl3iA_4CIBC9LOGaivdtkvk1NnfKfDJI",
-  authDomain: "fraud-eye.firebaseapp.com",
-  projectId: "fraud-eye",
-  storageBucket: "fraud-eye.firebasestorage.app",
-  messagingSenderId: "535813163862",
-  appId: "1:535813163862:web:94a74fd9f61d5dde2da4f7"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-
-const email = document.getElementById("floatingInput").value;
-const password = document.getElementById("floatingPassword").value;
 
 function attachLinkListener() {
     const popInner = document.querySelector(".login-popup p a");
@@ -88,29 +66,12 @@ signup.addEventListener("click", function() {
 });
 
 cont.addEventListener("click", function() {
-    cont.addEventListener("click", function() {
-        document.querySelector(".login-popup").style.display = "none";
-        document.querySelector(".blur-overlay").style.display = "none";
-    
-    
-        if (method == "signup") {
-            const auth = getAuth();
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // Signed up 
-                    const user = userCredential.user;
-                    alert("Creating Account...")
-                    // ...
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    alert(errorMessage)
-                    // ..
-                });
-    
-        }
-    });
+    document.querySelector(".login-popup").style.display = "none";
+    document.querySelector(".blur-overlay").style.display = "none";
+
+    if(method == "signup"){
+        
+    }
 });
 
 
