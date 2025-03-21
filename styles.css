@@ -366,9 +366,6 @@ body {
 .popup {
     height: 150px;
     display: none;
-    position: absolute;
-    top: 60px;
-    right: 0;
     background: white;
     padding: 15px;
     border-radius: 10px;
