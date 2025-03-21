@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     // Carousel functionality
-    let currentIndex = 0;
+    let currentIndex = 0; 
     const slides = document.querySelectorAll(".slide");
 
     function showSlide(index) {
@@ -116,8 +116,8 @@ window.onload = function () {
     }
 };
 
-function updateUI(user) {
-    document.getElementById('null-login').style.display = 'none';
+function updateUI(user) { 
+    document.getElementById('null-login').style.display = 'none !important';
     document.getElementById('user-section').style.display = 'block';
 
     document.getElementById('user-pic').src = user.picture;
