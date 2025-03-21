@@ -93,8 +93,9 @@ function handleCredentialResponse(response) {
     localStorage.setItem('user', JSON.stringify(user));
 
     // Redirect to home page after login
-    document.querySelector(".login-popup").style.display = "block";
-    document.querySelector(".blur-overlay").style.display = "block";  // Redirect AFTER storing user data
+    document.querySelector(".login-popup").style.display = "none";
+    document.querySelector(".blur-overlay").style.display = "none";  // Redirect AFTER storing user data
+    location.reload(); 
 }
 
 // Function to decode JWT token
@@ -128,4 +129,5 @@ function updateUI(user) {
 
 function logout() {
     localStorage.removeItem('user');
+    location.reload(); 
 }
