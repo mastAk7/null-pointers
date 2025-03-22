@@ -218,7 +218,8 @@ function updateUI(user) {
         document.getElementById('user-name').innerText = `Hello, ${user.displayName || user.email.split('@')[0]}!`;
         document.getElementById('user-email').innerText = user.email;
         
-        // Close popup if it's open after successful authentication
+        // Close popup if it's open after successful authentic
+        // tion
         closePopup();
     } else {
         document.getElementById('null-login').classList.remove("login-button-dis");
