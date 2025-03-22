@@ -32,110 +32,224 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Backend API URL (Replace with your actual ngrok URL)
-const apiUrl = "https://0ccf-34-125-27-184.ngrok-free.app";
+// Variables
+let method = "";
+const login = document.getElementsByClassName("l1")[0];
+const signup = document.getElementsByClassName("s1")[0];
+const cont = document.getElementsByClassName("cont")[0];
 
-// Submit a transaction for fraud detection
-async function submitTransaction(transactionData) {
+// Function to save user data to Firestore
+async function saveUserToFirestore(user) {
     try {
-        const response = await fetch(${apiUrl}/fraud-detection, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(transactionData),
+        // Create user document in Firestore
+        await setDoc(doc(db, "users", user.uid), {
+            name: user.displayName || user.email.split('@')[0],
+            email: user.email,
+            photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${user.email.split('@')[0]}`,
+            createdAt: new Date().toISOString(),
+            lastLogin: new Date().toISOString()
         });
-
-        const result = await response.json();
-        console.log("Fraud Detection Result:", result);
-
-        // Display result in UI
-        document.getElementById("fraud-result").innerText = JSON.stringify(result, null, 2);
+        console.log("User data saved to Firestore");
     } catch (error) {
-        console.error("Error detecting fraud:", error);
+        console.error("Error saving user to Firestore:", error);
     }
 }
 
-// Report a fraud case manually
-async function reportFraud(transactionId, isFraud, reason) {
-    try {
-        const response = await fetch(${apiUrl}/report-fraud, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                transaction_id: transactionId,
-                is_fraud: isFraud,
-                reason: reason
-            }),
+// Function to close popup
+function closePopup() {
+    document.querySelector(".login-popup").style.display = "none";
+    document.querySelector(".blur-overlay").style.display = "none";
+}
+
+// Handle link clicks inside popup
+function attachLinkListener() {
+    const popInner = document.querySelector(".login-popup p a");
+    if (popInner) {
+        popInner.addEventListener("click", function (event) {
+            event.preventDefault();
+            var targetClass = event.target.classList[0];
+
+            if (targetClass === "signup") {
+                signup.click();
+            } else if (targetClass === "login") {
+                login.click();
+            }
         });
-
-        const result = await response.json();
-        console.log("Fraud Report Submitted:", result);
-        alert("Fraud report updated successfully!");
-    } catch (error) {
-        console.error("Error reporting fraud:", error);
     }
 }
 
-// Fetch all fraud reports
-async function fetchFraudReports() {
-    try {
-        const response = await fetch(${apiUrl}/view-reports);
-        const data = await response.json();
-        console.log("Fraud Reports:", data);
-
-        // Display reports in UI
-        document.getElementById("fraud-reports").innerText = JSON.stringify(data, null, 2);
-    } catch (error) {
-        console.error("Error fetching fraud reports:", error);
-    }
-}
-
-// UI Integration - Example event listeners (Modify based on your actual UI elements)
-document.getElementById("submit-transaction-btn").addEventListener("click", () => {
-    const transactionData = {
-        transaction_id: document.getElementById("transaction-id").value,
-        amount: parseFloat(document.getElementById("amount").value),
-        payer_id: document.getElementById("payer-id").value,
-        payee_id: document.getElementById("payee-id").value,
-        transaction_channel: document.getElementById("transaction-channel").value,
-        payment_mode: document.getElementById("payment-mode").value
-    };
-    submitTransaction(transactionData);
+// Login button click
+login.addEventListener("click", function() {
+    method = "login";
+    document.querySelector(".login-popup").style.display = "block";
+    document.querySelector(".blur-overlay").style.display = "block";
+    document.querySelector(".login-popup .card-title").innerText = "Welcome Back";
+    document.querySelector(".login-popup p").innerHTML = `Don't have an account? <a class="signup" href="#">Sign Up</a>`;
+    attachLinkListener();
 });
 
-document.getElementById("report-fraud-btn").addEventListener("click", () => {
-    const transactionId = document.getElementById("report-transaction-id").value;
-    const isFraud = document.getElementById("report-is-fraud").checked;
-    const reason = document.getElementById("report-reason").value;
-    reportFraud(transactionId, isFraud, reason);
+// Signup button click
+signup.addEventListener("click", function() {
+    method = "signup";
+    document.querySelector(".login-popup").style.display = "block";
+    document.querySelector(".blur-overlay").style.display = "block";
+    document.querySelector(".login-popup .card-title").innerText = "Create Account";
+    document.querySelector(".login-popup p").innerHTML = `Already have an account? <a class="login" href="#">Log In</a>`;
+    attachLinkListener();
 });
 
-document.getElementById("view-reports-btn").addEventListener("click", fetchFraudReports);
+// Continue button click (for email/password auth)
+cont.addEventListener("click", function () {
+    const email = document.getElementById("floatingInput").value;
+    const password = document.getElementById("floatingPassword").value;
 
-// User Authentication UI Updates
-onAuthStateChanged(auth, (user) => {
+    if (!email || !password) {
+        alert("Please enter both email and password");
+        return;
+    }
+
+    if (method === "signup") {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // User created successfully
+                const user = userCredential.user;
+                alert("Account created successfully!");
+                
+                // Save user data to Firestore
+                saveUserToFirestore(user);
+                
+                // Close popup
+                closePopup();
+            })
+            .catch((error) => {
+                alert("Error: " + error.message);
+                console.error("Error Code:", error.code);
+            });
+    } else if (method === "login") {
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // User logged in successfully
+                const user = userCredential.user;
+                
+                // Update last login timestamp
+                setDoc(doc(db, "users", user.uid), { lastLogin: new Date().toISOString() }, { merge: true });
+                
+                // Close popup
+                closePopup();
+                
+                alert("Login successful!");
+            })
+            .catch((error) => {
+                alert("Login Failed: " + error.message);
+                console.error("Error Code:", error.code);
+            });
+    }
+});
+
+// Google Sign-In callback
+async function handleCredentialResponse(response) {
+    try {
+        // Create a credential with the Google ID token
+        const credential = GoogleAuthProvider.credential(response.credential);
+        
+        // Sign in to Firebase with the Google credential
+        const result = await signInWithCredential(auth, credential);
+        const user = result.user;
+        
+        console.log("Google sign-in successful for:", user.email);
+        
+        // Save user data to Firestore
+        await saveUserToFirestore(user);
+        
+        // Close the popup after a short delay
+        setTimeout(() => {
+            closePopup();
+            // Force close any Google popup that might still be open
+            const googlePopups = document.querySelectorAll('div[aria-modal="true"]');
+            googlePopups.forEach(popup => {
+                popup.style.display = 'none';
+            });
+            
+            // Remove any backdrop or overlay from the Google sign-in
+            const backdrops = document.querySelectorAll('.backdrop');
+            backdrops.forEach(backdrop => {
+                backdrop.style.display = 'none';
+            });
+        }, 1000);
+        
+    } catch (error) {
+        console.error("Firebase Google Sign-In Error:", error);
+        alert("Sign-In Failed: " + error.message);
+    }
+}
+
+// Toggle user popup
+function togglePopup() {
+    let popup = document.getElementById("user-popup");
+    popup.style.display = (popup.style.display === "block") ? "none" : "block";
+}
+
+// Close popup when clicking outside
+document.addEventListener("click", function(event) {
+    let popup = document.getElementById("user-popup");
+    let profilePic = document.getElementById("user-pic");
+
+    if (popup.style.display === "block" && event.target !== popup && event.target !== profilePic) {
+        popup.style.display = "none";
+    }
+});
+
+// Close login popup when clicking on blur overlay
+document.querySelector(".blur-overlay").addEventListener("click", function() {
+    closePopup();
+});
+
+// Update UI with user data
+function updateUI(user) {
     if (user) {
+        document.getElementById('null-login').classList.add("login-button-dis");
         document.getElementById('null-login').style.display = 'none';
         document.getElementById('user-section').style.display = 'block';
-        document.getElementById('user-pic').src = user.photoURL || https://ui-avatars.com/api/?name=${user.displayName || user.email.split('@')[0]};
-        document.getElementById('user-name').innerText = Hello, ${user.displayName || user.email.split('@')[0]}!;
+
+        // Set profile picture
+        document.getElementById('user-pic').src = user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.email.split('@')[0]}`;
+        
+        // Set name and email
+        document.getElementById('user-name').innerText = `Hello, ${user.displayName || user.email.split('@')[0]}!`;
         document.getElementById('user-email').innerText = user.email;
+        
+        // Close popup if it's open after successful authentication
+        closePopup();
     } else {
+        document.getElementById('null-login').classList.remove("login-button-dis");
         document.getElementById('null-login').style.display = 'flex';
         document.getElementById('user-section').style.display = 'none';
     }
-});
+}
 
-// Logout Function
+// Logout function
 function logout() {
     signOut(auth).then(() => {
+        // Sign-out successful
         alert("Logged out successfully");
     }).catch((error) => {
+        // An error happened
         console.error("Logout error:", error);
     });
 }
 
-// Expose functions globally for UI access
+// Auth state change listener
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // User is signed in
+        updateUI(user);
+    } else {
+        // User is signed out
+        updateUI(null);
+    }
+});
+
+// Expose functions to window object for global access
+window.togglePopup = togglePopup;
 window.logout = logout;
-window.submitTransaction = submitTransaction;
-window.reportFraud = reportFraud;
-window.fetchFraudReports = fetchFraudReports;
+window.handleCredentialResponse = handleCredentialResponse;
