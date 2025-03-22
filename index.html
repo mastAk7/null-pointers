@@ -1,229 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>fraudEye</title>
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap Icons -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-        <link rel="stylesheet" href="styles.css">
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
-    </head>
-    <body>
-        <div class="blur-overlay" id="blur-overlay"></div>
-        <div class="container-fluid login-popup">
-            <div class="card">
-                <div class="card-body">
-                  <h1 class="card-title">Welcome Back</h5>
-                    <br>
-                    <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                        <label for="floatingInput">Email address</label>
-                    </div>
-                    <div class="form-floating">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                        <label for="floatingPassword">Password</label>
-                    </div>
-                    <br>
-                    <button class="btn btn-dark cont" type="button"> Continue</button>
-                    <br>
-                    <p> Don't have an account? <a class="signup" href="#"> Sign Up </a> </p>
-                    <div class="row">   
-                        <div class="col-5"> <hr> </div>
-                        <div class="col-2 or"> OR </div>
-                        <div class="col-5"> <hr></div>
-                    </div>
-                    <br>
-                    <div id="g_id_onload"
-                         data-client_id="1015796529096-1dbhqv6pa7grrfjaf66m1qc5oa68hksk.apps.googleusercontent.com"
-                         data-callback="handleCredentialResponse"
-                         data-auto_prompt="false">
-                    </div>
-        
-                    <div class="g_id_signin" data-type="standard"></div>
-                </div>
-            </div>
-        </div>
-        <!-- Navbar -->
-    <!-- <div class="home"> -->
-        <nav id="navBar" class="navbar navbar-expand-lg">
-            <div class="container">
-                <a class="navbar-brand fade-in" href="#"><img src="logo.png" alt="Logo" class="logo">fraudEye</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                    <ul class="navbar-nav mx-auto fade-in">
-                        <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#stories">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#whyus">Why Us?</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
-                    </ul>
-                    <div id="null-login" class="d-flex">
-                        <a class="btn me-2 s1">Sign Up</a>
-                        <a class="btn l1">Login</a>
-                    </div>
-                    <div id="user-section" class="nav-btn-div" style="display: none;">
-                        <!-- Profile Image (Clickable) -->
-                        <img id="user-pic" src="" alt="User Image" class="profile-pic" onclick="togglePopup()">
-                    
-                        <!-- Popup Box -->
-                        <div id="user-popup" class="popup">
-                            <p id="user-name"></p>
-                            <p id="user-email"></p>
-                            <button onclick="logout()">Logout</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
 
-    <!-- Main Content -->
-    <div id="home" class="container text-center mt-5 fade-in">
-        <h1 id="t1">Detect the Fraud</h1>
-        <p class="text-muted" style="font-family: 'Times New Roman', Times, serif;"><i>Use AI to identify the type of fraud.</i></p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fraudEye</title>
 
-        <div class="card p-4 mt-4">
-            <i class="bi-shield-lock camera-icon" style="font-size: 3rem; color: #0c2f50;"></i>
-            <p class="mt-2">Click below to start</p>
-            <!-- <button id="start-camera" class="btn btn-green"> <a href="index1/index1.html"> Open Camera </a> -->
-            <a class="btn btn-outline-light title-btn-2" type="button" href="Index1/index1.html">Find the Fraud!</a>
-            <div id="camera-screen" class="camera-overlay" style="display: none;">
-                <video id="video" autoplay></video>
-                <button id="close-camera" class="close-camera">Close</button>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+    <!-- Overlay for Popups -->
+    <div class="blur-overlay" id="blur-overlay"></div>
+
+    <!-- Login Popup -->
+    <div class="container-fluid login-popup">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Welcome Back</h1>
+                <br>
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                    <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <br>
+                <button class="btn btn-dark cont" type="button">Continue</button>
+                <p>Don't have an account? <a class="signup" href="#">Sign Up</a></p>
+
+                <div class="row">
+                    <div class="col-5"><hr></div>
+                    <div class="col-2 or">OR</div>
+                    <div class="col-5"><hr></div>
+                </div>
+
+                <div id="g_id_onload"
+                    data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                    data-callback="handleCredentialResponse"
+                    data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin" data-type="standard"></div>
             </div>
         </div>
     </div>
-    <!-- </div> -->
 
-    <section class="coloured-section fade-in" id="stories">
-        <div id="story" class="carousel slide">
-            <div class="carousel-inner">
-
-                <div class="carousel-item active container-fluid">
-                    <h2> James Carter's e-commerce store was drowning in chargebacks. Manual reviews were too slow, and fraud kept slipping through. With FraudEye, transactions were analyzed in real time, stopping fraud before it could cause damage. </h2>
-                    <div class="row story-row">
-                        <div class="col-lg-3">
-                            <img class="story-image" src="assests/impact1.png" alt="Impact Story 1">
-                        </div>
-                        <div class="col-lg-9 story-conf">
-                            <em>  "This tool blocked a scam within the first week! It's like having a 24/7 security guard for our payments." says James Carter's, CEO at TrendyCart</em>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="carousel-item container-fluid">
-                    <h2> Neha Sharma's payment platform struggled with delayed fraud detection. By the time they flagged issues, the money was gone. FraudEye's AI-driven alerts caught suspicious activity instantly, helping her team act before it was too late. </h2>
-                    <div class="row story-row">
-                        <div class="col-lg-3">
-                            <img class="story-image" src="assests/impact2.png" alt="Impact Story 2">
-                        </div>
-                        <div class="col-lg-9 story-conf">
-                            <em> "We finally feel in control. FraudEye's speed and accuracy are game-changers!" says Neha Sharma, CTO at PaySecure.</em>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="carousel-item container-fluid">
-                    <h2> Daniel Wong wanted a fraud detection system that was both powerful and easy to use. Complex dashboards from other tools were overwhelming, but FraudEye's simple interface and detailed insights made fraud monitoring effortless.</h2>
-                    <div class="row story-row">
-                        <div class="col-lg-3">
-                            <img class="story-image" src="assests/impact3.png" alt="Impact Story 3">
-                        </div>
-                        <div class="col-lg-9 story-conf">
-                            <em> "Accurate, fast, and user-friendly—exactly what we needed!" says Daniel Wong, CFO at SwiftPayments</em>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="carousel-item container-fluid">
-                    <h2> Priya Malhotra had tested multiple fraud prevention tools, but slow processing and false positives kept causing problems. FraudEye's AI-powered fraud scores gave her team clear, actionable insights.  </h2>
-                    <div class="row story-row">
-                        <div class="col-lg-3">
-                            <img class="story-image" src="assests/impact4.png" alt="Impact Story 4">
-                        </div>
-                        <div class="col-lg-9 story-conf">
-                            <em> "No more guessing! FraudEye tells us exactly when and why a transaction is risky." says Priya Malhotra, Founder at DigiTrade</em>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="carousel-item container-fluid">
-                    <h2> Markel Evans' subscription platform faced frequent fraudulent signups. Her team needed an instant fraud detection solution—and FraudEye delivered. Now, they catch fraudsters before they exploit the system.
-                    </h2>
-                    <div class="row story-row">
-                        <div class="col-lg-3">
-                            <img class="story-image" src="assests/impact5.png" alt="Impact Story 5">
-                        </div>
-                        <div class="col-lg-9 story-conf">
-                            <em> "We went from reacting to fraud to preventing it. Huge difference!" says Markel Evans, COO at StreamNow </em>
-                        </div>
-                    </div>
-                </div>
-                
-
-            </div>
-            <button class="carousel-control-prev" type="button"data-bs-target="#story" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"aria-hidden="true"></span>
+    <!-- Navbar -->
+    <nav id="navBar" class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand fade-in" href="#">
+                <img src="logo.png" alt="Logo" class="logo"> fraudEye
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
             </button>
-            <button class="carousel-control-next" type="button"data-bs-target="#story" data-bs-slide="next">
-                <span class="carousel-control-next-icon"aria-hidden="true"></span>
-            </button>
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#story" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"> </button>
-                <button type="button" data-bs-target="#story" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#story" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                <button type="button" data-bs-target="#story" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                <button type="button" data-bs-target="#story" data-bs-slide-to="4" aria-label="Slide 5"></button>
-            </div>
-        </div>
-    </section>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav mx-auto fade-in">
+                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#whyus">Why Us?</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
 
-    <section class="white-section fade-in" id="whyus"></section>
-        <div class="container-fluid">
-            <div class="row1 row">
-                <div class="feature-box col-lg-4">
-                    <i class="bi bi-shield-check feature-icon fa-5x"></i>
-                    <h3><strong>Real-Time Fraud Detection</strong> </h3>
-                    <p> Instantly analyzes transactions using AI & rule-based detection to identify fraudulent activity within milliseconds.</p>
+                <div id="null-login" class="d-flex">
+                    <a class="btn me-2 s1">Sign Up</a>
+                    <a class="btn l1">Login</a>
                 </div>
-                <div class="feature-box col-lg-4">
-                    <i class="bi bi-bar-chart-line-fill feature-icon fa-5x"></i>
-                    <h3> <strong>Interactive Fraud Monitoring </strong></h3>
-                    <p> Visualizes fraud trends with dynamic graphs, search & filters, helping businesses track and prevent fraud efficiently. </p>
-                </div>
-                <div class="feature-box col-lg-4">
-                    <i class="bi bi-exclamation-triangle-fill feature-icon fa-5x"></i>
-                    <h3> <strong> Automated Fraud Reporting System </strong> </h3>
-                    <p> Enables quick fraud reporting, stores data securely, and improves AI accuracy with continuous learning.</p>
+
+                <!-- User Profile Section -->
+                <div id="user-section" class="nav-btn-div" style="display: none;">
+                    <img id="user-pic" src="" alt="User Image" class="profile-pic" onclick="togglePopup()">
+                    <div id="user-popup" class="popup">
+                        <p id="user-name"></p>
+                        <p id="user-email"></p>
+                        <button onclick="logout()">Logout</button>
+                    </div>
                 </div>
             </div>
         </div>
+    </nav>
 
-    </section>
+    <!-- Main Content -->
+    <div id="home" class="container mt-5 fade-in">
+        <h1>Detect the Fraud</h1>
+        <p class="text-muted"><i>Use AI to identify fraudulent activity.</i></p>
 
-    <div class="contact">
-        
+        <!-- Transaction Form -->
+        <div class="card p-4 mt-4">
+            <h3>Submit a Transaction</h3>
+            <input id="transaction-id" class="form-control mb-2" placeholder="Transaction ID">
+            <input id="amount" class="form-control mb-2" placeholder="Amount" type="number">
+            <input id="payer-id" class="form-control mb-2" placeholder="Payer ID">
+            <input id="payee-id" class="form-control mb-2" placeholder="Payee ID">
+            <select id="transaction-channel" class="form-control mb-2">
+                <option value="online">Online</option>
+                <option value="offline">Offline</option>
+            </select>
+            <select id="payment-mode" class="form-control mb-2">
+                <option value="credit_card">Credit Card</option>
+                <option value="bank_transfer">Bank Transfer</option>
+            </select>
+            <button id="submit-transaction-btn" class="btn btn-primary">Check for Fraud</button>
+
+            <h5 class="mt-3">Result:</h5>
+            <pre id="fraud-result"></pre>
+        </div>
+
+        <!-- Report Fraud Form -->
+        <div class="card p-4 mt-4">
+            <h3>Report Fraud</h3>
+            <input id="report-transaction-id" class="form-control mb-2" placeholder="Transaction ID">
+            <input id="report-reason" class="form-control mb-2" placeholder="Reason for Reporting">
+            <label>
+                <input id="report-is-fraud" type="checkbox"> Is Fraudulent?
+            </label>
+            <button id="report-fraud-btn" class="btn btn-warning mt-2">Report Fraud</button>
+        </div>
+
+        <!-- View Fraud Reports -->
+        <div class="card p-4 mt-4">
+            <h3>View Fraud Reports</h3>
+            <button id="view-reports-btn" class="btn btn-danger">Fetch Reports</button>
+            <pre id="fraud-reports" class="mt-3"></pre>
+        </div>
     </div>
 
     <!-- Footer -->
-    <div class="footer" id="footer">
+    <footer class="footer" id="contact">
         <p>&copy; 2025 Fraud Detection App</p>
-    </div>
+    </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Load Firebase modules -->
+
+    <!-- Load Firebase and API Integration -->
     <script type="module" src="script.js"></script>
 
-    <!-- Make functions globally available -->
+    <!-- Global Functions -->
     <script>
         window.togglePopup = function() {};
         window.logout = function() {};
         window.handleCredentialResponse = function() {};
     </script>
+
 </body>
+
 </html>
